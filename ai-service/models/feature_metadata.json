@@ -1,0 +1,13 @@
+{
+  "features": [
+    "average_score",
+    "recent_score",
+    "attempts",
+    "trend",
+    "accuracy",
+    "average_response_time",
+    "topic_mastery"
+  ],
+  "model": "RandomForestRegressor",
+  "training_data": "synthetic demonstration data"
+}

@@ -1,0 +1,18 @@
+import { Router } from "express";
+import { z } from "zod";
+import { requireAdmin, requireAuth } from "../middleware/auth.js";
+import { supabase } from "../config/supabase.js";
+import { AppError } from "../utils/http.js";
+
+export const adminGamificationRouter=Router(); adminGamificationRouter.use(requireAuth,requireAdmin);
+const badgeSchema=z.object({name:z.string().trim().min(2).max(100),description:z.string().trim().min(3).max(500),icon:z.string().trim().min(1).max(80).default("Award"),image_url:z.string().url().nullable().optional(),criteria_type:z.enum(["quizzes_completed","questions_solved","total_xp","streak","accuracy","speed_under","perfect_scores","subject_accuracy","global_rank"]),criteria_value:z.number().nonnegative(),is_active:z.boolean().default(true)});
+
+adminGamificationRouter.get("/badges",async(_req,res,next)=>{try{const{data,error}=await supabase.from("badges").select("*").order("created_at");if(error)throw new AppError(500,"Unable to load badges.");res.json({badges:data||[]})}catch(e){next(e)}});
+adminGamificationRouter.post("/badges",async(req,res,next)=>{try{const body=badgeSchema.parse(req.body);const{data,error}=await supabase.from("badges").insert({...body,xp_required:body.criteria_type==="total_xp"?body.criteria_value:0}).select().single();if(error)throw new AppError(400,"Unable to create badge.");res.status(201).json({badge:data})}catch(e){next(e)}});
+adminGamificationRouter.patch("/badges/:id",async(req,res,next)=>{try{const body=badgeSchema.partial().parse(req.body);const update:any={...body,updated_at:new Date().toISOString()};if(body.criteria_type==="total_xp"&&body.criteria_value!==undefined)update.xp_required=body.criteria_value;const{data,error}=await supabase.from("badges").update(update).eq("id",req.params.id).select().maybeSingle();if(error||!data)throw new AppError(404,"Badge not found.");res.json({badge:data})}catch(e){next(e)}});
+adminGamificationRouter.delete("/badges/:id",async(req,res,next)=>{try{const{error}=await supabase.from("badges").delete().eq("id",req.params.id);if(error)throw new AppError(409,"Badge could not be deleted.");res.json({message:"Badge deleted."})}catch(e){next(e)}});
+adminGamificationRouter.get("/gamification-stats",async(_req,res,next)=>{try{
+  const[{data:stats},{data:transactions},{data:earned},{data:badges}]=await Promise.all([supabase.from("student_stats").select("user_id,total_xp,quizzes_completed,streak_days,longest_streak").order("total_xp",{ascending:false}),supabase.from("xp_transactions").select("amount"),supabase.from("student_badges").select("badge_id"),supabase.from("badges").select("id,name")]);
+  const ids=(stats||[]).slice(0,10).map(s=>s.user_id);const{data:profiles}=ids.length?await supabase.from("profiles").select("id,full_name").in("id",ids):{data:[] as any[]};const names=new Map((profiles||[]).map(p=>[p.id,p.full_name]));const counts=new Map<string,number>();for(const x of earned||[])counts.set(x.badge_id,(counts.get(x.badge_id)||0)+1);
+  res.json({total_xp_awarded:(transactions||[]).reduce((s,x)=>s+Number(x.amount),0),most_active_learners:(stats||[]).slice(0,10).map(s=>({...s,full_name:names.get(s.user_id)||"Student"})),longest_streaks:[...(stats||[])].sort((a,b)=>Number(b.longest_streak)-Number(a.longest_streak)).slice(0,10).map(s=>({...s,full_name:names.get(s.user_id)||"Student"})),badge_distribution:(badges||[]).map(b=>({badge:b.name,count:counts.get(b.id)||0})),leaderboard_activity:{ranked_learners:(stats||[]).filter(s=>Number(s.total_xp)>0).length,total_completed_quizzes:(stats||[]).reduce((s,x)=>s+Number(x.quizzes_completed),0)}})
+}catch(e){next(e)}});

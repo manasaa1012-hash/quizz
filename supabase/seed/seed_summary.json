@@ -1,0 +1,70 @@
+{
+  "subjects": 10,
+  "topics": 50,
+  "questions": 500,
+  "questions_per_subject": {
+    "Mathematics": 50,
+    "Physics": 50,
+    "Chemistry": 50,
+    "Biology": 50,
+    "Computer Science": 50,
+    "Data Structures and Algorithms": 50,
+    "Database Management Systems": 50,
+    "Operating Systems": 50,
+    "Aptitude and Reasoning": 50,
+    "English": 50
+  },
+  "difficulty_per_subject": {
+    "Mathematics": {
+      "easy": 15,
+      "medium": 20,
+      "hard": 15
+    },
+    "Physics": {
+      "easy": 15,
+      "medium": 20,
+      "hard": 15
+    },
+    "Chemistry": {
+      "easy": 15,
+      "medium": 20,
+      "hard": 15
+    },
+    "Biology": {
+      "easy": 15,
+      "medium": 20,
+      "hard": 15
+    },
+    "Computer Science": {
+      "easy": 15,
+      "medium": 20,
+      "hard": 15
+    },
+    "Data Structures and Algorithms": {
+      "easy": 15,
+      "medium": 20,
+      "hard": 15
+    },
+    "Database Management Systems": {
+      "easy": 15,
+      "medium": 20,
+      "hard": 15
+    },
+    "Operating Systems": {
+      "easy": 15,
+      "medium": 20,
+      "hard": 15
+    },
+    "Aptitude and Reasoning": {
+      "easy": 15,
+      "medium": 20,
+      "hard": 15
+    },
+    "English": {
+      "easy": 15,
+      "medium": 20,
+      "hard": 15
+    }
+  },
+  "exams": 10
+}

@@ -1,0 +1,21 @@
+supbase pass = Y9EpVDZ8wTOmWiYr
+
+
+Email: admin@example.com
+Password: Admin@12345
+
+
+
+
+
+set "postgresql://postgres.lrkgumzcwilstdbusdqp:Y9EpVDZ8wTOmWiYr@aws-0-ap-south-1.pooler.supabase.com:5432/postgres"
+
+
+npx supabase db dump --db-url "%SUPABASE_DB_URL%" -f "supabase-backup\schema.sql"
+
+dir supabase-backup
+
+
+npx supabase db dump --db-url "%SUPABASE_DB_URL%" -f "supabase-backup\roles.sql" --role-only
+
+npx supabase db dump --db-url "%SUPABASE_DB_URL%" -f "supabase-backup\data.sql" --use-copy --data-only -x "storage.buckets_vectors" -x "storage.vector_indexes"

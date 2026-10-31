@@ -1,0 +1,343 @@
+{
+  "project": "AI-Powered Online Quiz Platform",
+  "version": "1.0.0",
+  "file_count": 84,
+  "files": [
+    {
+      "path": ".env.example",
+      "bytes": 92
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 139
+    },
+    {
+      "path": "README.md",
+      "bytes": 4091
+    },
+    {
+      "path": "ai-service/.env.example",
+      "bytes": 43
+    },
+    {
+      "path": "ai-service/Dockerfile",
+      "bytes": 202
+    },
+    {
+      "path": "ai-service/app/__init__.py",
+      "bytes": 0
+    },
+    {
+      "path": "ai-service/app/__pycache__/__init__.cpython-313.pyc",
+      "bytes": 159
+    },
+    {
+      "path": "ai-service/app/__pycache__/engines.cpython-313.pyc",
+      "bytes": 4547
+    },
+    {
+      "path": "ai-service/app/__pycache__/main.cpython-313.pyc",
+      "bytes": 2502
+    },
+    {
+      "path": "ai-service/app/__pycache__/schemas.cpython-313.pyc",
+      "bytes": 1993
+    },
+    {
+      "path": "ai-service/app/engines.py",
+      "bytes": 2541
+    },
+    {
+      "path": "ai-service/app/main.py",
+      "bytes": 1311
+    },
+    {
+      "path": "ai-service/app/schemas.py",
+      "bytes": 638
+    },
+    {
+      "path": "ai-service/models/performance_model.joblib",
+      "bytes": 10331329
+    },
+    {
+      "path": "ai-service/requirements.txt",
+      "bytes": 121
+    },
+    {
+      "path": "ai-service/tests/__pycache__/test_engines.cpython-313.pyc",
+      "bytes": 803
+    },
+    {
+      "path": "ai-service/tests/test_engines.py",
+      "bytes": 339
+    },
+    {
+      "path": "ai-service/training/__pycache__/train_performance_model.cpython-313.pyc",
+      "bytes": 2193
+    },
+    {
+      "path": "ai-service/training/train_performance_model.py",
+      "bytes": 1122
+    },
+    {
+      "path": "backend/.env.example",
+      "bytes": 176
+    },
+    {
+      "path": "backend/Dockerfile",
+      "bytes": 118
+    },
+    {
+      "path": "backend/package.json",
+      "bytes": 618
+    },
+    {
+      "path": "backend/src/app.ts",
+      "bytes": 1437
+    },
+    {
+      "path": "backend/src/config/env.ts",
+      "bytes": 534
+    },
+    {
+      "path": "backend/src/config/supabase.ts",
+      "bytes": 240
+    },
+    {
+      "path": "backend/src/middleware/auth.ts",
+      "bytes": 1196
+    },
+    {
+      "path": "backend/src/middleware/error.ts",
+      "bytes": 484
+    },
+    {
+      "path": "backend/src/routes/admin.ts",
+      "bytes": 4514
+    },
+    {
+      "path": "backend/src/routes/ai.ts",
+      "bytes": 1452
+    },
+    {
+      "path": "backend/src/routes/analytics.ts",
+      "bytes": 1641
+    },
+    {
+      "path": "backend/src/routes/auth.ts",
+      "bytes": 238
+    },
+    {
+      "path": "backend/src/routes/dashboard.ts",
+      "bytes": 1079
+    },
+    {
+      "path": "backend/src/routes/exams.ts",
+      "bytes": 1749
+    },
+    {
+      "path": "backend/src/routes/leaderboard.ts",
+      "bytes": 1033
+    },
+    {
+      "path": "backend/src/routes/proctoring.ts",
+      "bytes": 1044
+    },
+    {
+      "path": "backend/src/routes/quiz.ts",
+      "bytes": 5855
+    },
+    {
+      "path": "backend/src/routes/results.ts",
+      "bytes": 1129
+    },
+    {
+      "path": "backend/src/server.ts",
+      "bytes": 179
+    },
+    {
+      "path": "backend/src/services/aiClient.ts",
+      "bytes": 1480
+    },
+    {
+      "path": "backend/src/types/express.d.ts",
+      "bytes": 238
+    },
+    {
+      "path": "backend/src/utils/scoring.ts",
+      "bytes": 1259
+    },
+    {
+      "path": "backend/tsconfig.json",
+      "bytes": 336
+    },
+    {
+      "path": "docker-compose.yml",
+      "bytes": 436
+    },
+    {
+      "path": "docs/API.md",
+      "bytes": 836
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "bytes": 1533
+    },
+    {
+      "path": "docs/DATABASE.md",
+      "bytes": 887
+    },
+    {
+      "path": "docs/PROJECT_SCOPE.md",
+      "bytes": 816
+    },
+    {
+      "path": "docs/synopsis/Project Phase-1 Synopsis Format.pdf",
+      "bytes": 450180
+    },
+    {
+      "path": "frontend/.env.example",
+      "bytes": 127
+    },
+    {
+      "path": "frontend/Dockerfile",
+      "bytes": 118
+    },
+    {
+      "path": "frontend/index.html",
+      "bytes": 363
+    },
+    {
+      "path": "frontend/package.json",
+      "bytes": 629
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "bytes": 2337
+    },
+    {
+      "path": "frontend/src/components/Layout.tsx",
+      "bytes": 2352
+    },
+    {
+      "path": "frontend/src/components/MetricCard.tsx",
+      "bytes": 488
+    },
+    {
+      "path": "frontend/src/components/RequireAuth.tsx",
+      "bytes": 452
+    },
+    {
+      "path": "frontend/src/context/AuthContext.tsx",
+      "bytes": 2119
+    },
+    {
+      "path": "frontend/src/lib/api.ts",
+      "bytes": 666
+    },
+    {
+      "path": "frontend/src/lib/supabase.ts",
+      "bytes": 359
+    },
+    {
+      "path": "frontend/src/main.tsx",
+      "bytes": 237
+    },
+    {
+      "path": "frontend/src/pages/AdminDashboard.tsx",
+      "bytes": 1487
+    },
+    {
+      "path": "frontend/src/pages/AdminExamsPage.tsx",
+      "bytes": 6087
+    },
+    {
+      "path": "frontend/src/pages/AdminUsersPage.tsx",
+      "bytes": 790
+    },
+    {
+      "path": "frontend/src/pages/AnalyticsPage.tsx",
+      "bytes": 2472
+    },
+    {
+      "path": "frontend/src/pages/ExamsPage.tsx",
+      "bytes": 1552
+    },
+    {
+      "path": "frontend/src/pages/LandingPage.tsx",
+      "bytes": 2311
+    },
+    {
+      "path": "frontend/src/pages/LeaderboardPage.tsx",
+      "bytes": 1419
+    },
+    {
+      "path": "frontend/src/pages/LoginPage.tsx",
+      "bytes": 1472
+    },
+    {
+      "path": "frontend/src/pages/ProfilePage.tsx",
+      "bytes": 632
+    },
+    {
+      "path": "frontend/src/pages/QuizPage.tsx",
+      "bytes": 6687
+    },
+    {
+      "path": "frontend/src/pages/RecommendationsPage.tsx",
+      "bytes": 2237
+    },
+    {
+      "path": "frontend/src/pages/RegisterPage.tsx",
+      "bytes": 1903
+    },
+    {
+      "path": "frontend/src/pages/ResultPage.tsx",
+      "bytes": 1603
+    },
+    {
+      "path": "frontend/src/pages/StudentDashboard.tsx",
+      "bytes": 2523
+    },
+    {
+      "path": "frontend/src/styles.css",
+      "bytes": 12284
+    },
+    {
+      "path": "frontend/src/types.ts",
+      "bytes": 1283
+    },
+    {
+      "path": "frontend/tsconfig.app.json",
+      "bytes": 507
+    },
+    {
+      "path": "frontend/tsconfig.json",
+      "bytes": 119
+    },
+    {
+      "path": "frontend/tsconfig.node.json",
+      "bytes": 211
+    },
+    {
+      "path": "frontend/vite.config.ts",
+      "bytes": 161
+    },
+    {
+      "path": "package.json",
+      "bytes": 414
+    },
+    {
+      "path": "supabase/README.md",
+      "bytes": 409
+    },
+    {
+      "path": "supabase/migrations/001_initial_schema.sql",
+      "bytes": 8251
+    },
+    {
+      "path": "supabase/seed/seed.sql",
+      "bytes": 1909
+    }
+  ]
+}
