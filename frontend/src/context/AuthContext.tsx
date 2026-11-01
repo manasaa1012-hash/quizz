@@ -31,16 +31,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const loadProfile = async (accessToken?: string) => {
-    try {
-      const { data } = await api.get("/auth/me", accessToken ? {
-        headers: { Authorization: `Bearer ${accessToken}` }
-      } : undefined);
-      setProfile(data.profile);
-      setProfileError(null);
-    } catch (caught) {
-      setProfile(null);
-      setProfileError(caught instanceof Error ? caught.message : "Unable to load your account.");
+    let lastError: unknown;
+
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        const { data } = await api.get("/auth/me", accessToken ? {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        } : undefined);
+        setProfile(data.profile);
+        setProfileError(null);
+        return;
+      } catch (caught) {
+        lastError = caught;
+        if (attempt < 2) await new Promise((resolve) => window.setTimeout(resolve, 1000 * (attempt + 1)));
+      }
     }
+
+    // Keep a previously loaded profile so a short network outage never logs a student out.
+    setProfileError(lastError instanceof Error ? lastError.message : "Unable to load your account.");
   };
 
   useEffect(() => {

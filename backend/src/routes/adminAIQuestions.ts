@@ -9,6 +9,14 @@ import { generateQuestions, generatedQuestionSchema } from "../services/question
 export const adminAIQuestionsRouter = Router();
 adminAIQuestionsRouter.use(requireAuth, requireAdmin);
 
+function draftsSetupError(error: any) {
+  const code = String(error?.code || "");
+  if (code === "42P01" || code === "PGRST205") {
+    return new AppError(503, "AI Drafts database setup is missing. Apply Supabase migration 009_phase6_proctoring_ai_final.sql, then retry.");
+  }
+  return new AppError(503, "AI Drafts is temporarily unavailable. Check the backend Supabase connection and retry.");
+}
+
 const generateSchema = z.object({
   subject_id: z.string().uuid(), topic_id: z.string().uuid(),
   difficulty: z.enum(["easy", "medium", "hard"]),
@@ -25,7 +33,7 @@ adminAIQuestionsRouter.get("/ai-questions/drafts", async (req, res, next) => {
   try {
     const { data, error } = await supabase.from("ai_question_drafts").select("*")
       .eq("created_by", req.authUser!.id).order("created_at", { ascending: false }).limit(100);
-    if (error) throw new AppError(500, "Unable to load generated drafts.");
+    if (error) throw draftsSetupError(error);
     res.json({ drafts: data || [] });
   } catch (error) { next(error); }
 });
@@ -41,7 +49,7 @@ adminAIQuestionsRouter.post("/ai-questions/generate", async (req, res, next) => 
     const questions = await generateQuestions({ subject: subject.name, topic: topic.name, difficulty: body.difficulty, count: body.number_of_questions, questionType: body.question_type });
     const rows = questions.map(question => ({ ...question, created_by: req.authUser!.id, subject_id: subject.id, topic_id: topic.id, question_type: body.question_type, provider: env.aiProvider, status: "draft" }));
     const { data, error } = await supabase.from("ai_question_drafts").insert(rows).select();
-    if (error) throw new AppError(500, "Generated questions could not be stored as drafts.");
+    if (error) throw draftsSetupError(error);
     res.status(201).json({ drafts: data || [], message: "Questions generated as drafts. Review and approve before saving." });
   } catch (error) { next(error); }
 });

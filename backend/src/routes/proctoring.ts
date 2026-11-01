@@ -50,7 +50,10 @@ proctoringRouter.post("/event", async (req, res, next) => {
     if (error) throw new AppError(500, "Unable to store proctoring event.");
     const report = await recalculateReport(attempt);
     let paused = false;
-    if (body.event_type === "head_turn_sustained") {
+    // Record a sustained head turn for review, but do not pause an exam. A
+    // false-positive must never force a student into an admin resume flow.
+    const pauseForHeadTurn = false;
+    if (pauseForHeadTurn && body.event_type === "head_turn_sustained") {
       const remaining = Math.max(0, Math.floor((new Date((attempt as any).expires_at || Date.now()).getTime() - Date.now()) / 1000));
       const { data: pausedAttempt, error: pauseError } = await supabase.from("exam_attempts").update({
         status: "paused", paused_at: new Date().toISOString(), paused_reason: "head_turn_sustained", remaining_seconds_at_pause: remaining

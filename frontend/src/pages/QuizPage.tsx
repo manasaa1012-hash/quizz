@@ -97,6 +97,8 @@ export default function QuizPage() {
   const [cameraState, setCameraState] = useState<"inactive" | "active" | "denied" | "unsupported">("inactive");
   const [faceStatus, setFaceStatus] = useState("Not checked");
   const [cameraError, setCameraError] = useState("");
+  const [proctorWarning, setProctorWarning] = useState("");
+  const [cameraPosition, setCameraPosition] = useState({ x: 16, y: 16 });
   const [headYaw, setHeadYaw] = useState<number | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const landmarkCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -113,6 +115,20 @@ export default function QuizPage() {
   const answersRef = useRef<Record<string, AnswerState>>({});
   const savingRef = useRef(false);
   const submittingRef = useRef(false);
+  const dragStartRef = useRef<{ pointerX: number; pointerY: number; x: number; y: number } | null>(null);
+
+  function startCameraDrag(event: React.PointerEvent<HTMLDivElement>) {
+    dragStartRef.current = { pointerX: event.clientX, pointerY: event.clientY, x: cameraPosition.x, y: cameraPosition.y };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function moveCameraDrag(event: React.PointerEvent<HTMLDivElement>) {
+    const start = dragStartRef.current;
+    if (!start) return;
+    setCameraPosition({ x: Math.max(0, start.x - (event.clientX - start.pointerX)), y: Math.max(0, start.y - (event.clientY - start.pointerY)) });
+  }
+
+  function endCameraDrag() { dragStartRef.current = null; }
 
   useEffect(() => {
     if (!examId) return;
@@ -379,6 +395,7 @@ export default function QuizPage() {
     };
     const handleVisibility = () => {
       if (document.visibilityState === "hidden") {
+        setProctorWarning("Warning: tab switching is monitored. Please remain on the exam page.");
         report("visibility_hidden", { visibility_state: document.visibilityState });
         report("tab_switch", { visibility_state: document.visibilityState });
       }
@@ -458,6 +475,7 @@ export default function QuizPage() {
             headTurnSinceRef.current = started;
             if (Date.now() - started >= durationSeconds * 1000 && !pauseTriggeredRef.current) {
               pauseTriggeredRef.current = true;
+              setProctorWarning("Warning: sustained head movement was detected. Please face the screen.");
               const response = await api.post("/proctoring/event", { attempt_id: attemptId, event_type: "head_turn_sustained", details: { yaw_degrees: Number(yaw.toFixed(1)), threshold_degrees: yawThreshold, duration_seconds: durationSeconds } });
               if (response.data?.paused) { stopCamera(); navigate(`/app/exams/${payload.exam.id}`, { state: { proctoringPaused: true } }); }
             }
@@ -652,8 +670,11 @@ export default function QuizPage() {
         </div>
       </div>
 
-      {payload.exam.webcam_required && <video ref={videoRef} className="proctor-video" muted playsInline autoPlay aria-label="Your proctoring camera preview" />}
-      {payload.exam.webcam_required && <canvas ref={landmarkCanvasRef} className="proctor-landmarks" aria-label="Face landmark overlay" />}
+      {payload.exam.webcam_required && <div className="proctor-camera-window" style={{ right: cameraPosition.x, bottom: cameraPosition.y }}>
+        <div className="proctor-camera-handle" onPointerDown={startCameraDrag} onPointerMove={moveCameraDrag} onPointerUp={endCameraDrag} onPointerCancel={endCameraDrag}>Drag camera</div>
+        <video ref={videoRef} className="proctor-video" muted playsInline autoPlay aria-label="Your proctoring camera preview" />
+        <canvas ref={landmarkCanvasRef} className="proctor-landmarks" aria-label="Face landmark overlay" />
+      </div>}
 
       <div className="quiz-body">
         <aside className="question-palette">
@@ -663,7 +684,7 @@ export default function QuizPage() {
             <span>Marked: {summary.marked}</span>
             <span>Visited: {summary.visited}</span>
           </div>
-          <div>
+          <div className="question-palette-grid">
             {questions.map((question, index) => (
               <button
                 key={question.id}
@@ -691,6 +712,7 @@ export default function QuizPage() {
           </div>
 
           {error && <div className="alert error">{error}</div>}
+          {proctorWarning && <div className="alert warning" role="alert">{proctorWarning}</div>}
           {saveMessage && <div className="alert success">{saveMessage}</div>}
 
           <h2>{currentQuestion.question_text}</h2>

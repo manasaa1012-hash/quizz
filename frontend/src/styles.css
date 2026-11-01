@@ -210,7 +210,7 @@ textarea { min-height:95px; resize:vertical; }
 .quiz-body { display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 142px); gap:20px; padding:20px; }
 .question-palette { padding:24px;background:rgba(255,255,255,.88);border:1px solid var(--line); border-radius:24px; box-shadow:var(--shadow-sm); align-self:start; }
 .quiz-summary { display:grid !important; gap:6px; margin-bottom:14px; color:var(--muted); font-size:.86rem; }
-.question-palette>div { display:grid;grid-template-columns:repeat(4,1fr);gap:8px; }
+.question-palette-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:8px; }
 .question-palette button { border:1px solid var(--line-strong);background:white;border-radius:12px;aspect-ratio:1; }
 .question-palette button.active { outline:2px solid var(--primary); }
 .question-palette button.not-visited { background:white; }
@@ -230,7 +230,7 @@ textarea { min-height:95px; resize:vertical; }
 .quiz-actions-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
 .button.flagged { background:var(--warning-light); color:var(--warning-text); box-shadow:none; }
 .quiz-nav { display:flex;justify-content:space-between;margin-top:28px; }
-.palette-legend { display:grid; gap:8px; margin-top:16px; color:var(--muted); font-size:.82rem; }
+.palette-legend { display:grid; grid-template-columns:1fr; gap:8px; margin-top:16px; padding-top:14px; border-top:1px solid var(--line); color:var(--muted); font-size:.82rem; }
 .palette-legend span { display:flex; align-items:center; gap:8px; }
 .legend { width:14px; height:14px; border-radius:4px; display:inline-block; border:1px solid #cbd5e1; }
 .legend.not-visited { background:white; }
@@ -668,7 +668,7 @@ input::placeholder, textarea::placeholder { color:#9aa7b8; }
   .quiz-page { margin:0; }
   .quiz-body { grid-template-columns:1fr; }
   .question-palette { border-right:0; }
-  .question-palette>div { grid-template-columns:repeat(8,1fr); }
+  .question-palette-grid { grid-template-columns:repeat(8,1fr); }
   .warning-pill { display:none; }
   .result-stats { grid-template-columns:1fr 1fr; }
   .quiz-actions-row, .attempt-history-meta, .review-meta, .detail-badges { flex-direction:column; align-items:flex-start; }
@@ -717,7 +717,7 @@ input::placeholder, textarea::placeholder { color:#9aa7b8; }
   .nav-toggle, .notification-bell { width:36px; height:36px; }
   .avatar { width:34px; height:34px; }
   .topnav-links.open { grid-template-columns:1fr; }
-  .question-palette > div { grid-template-columns:repeat(6, 1fr); }
+  .question-palette-grid { grid-template-columns:repeat(6, 1fr); }
   .quiz-actions-row .button { width:100%; }
   .quiz-nav { gap:8px; }
   .quiz-nav .button { flex:1; padding:.7rem .55rem; }
@@ -730,8 +730,11 @@ input::placeholder, textarea::placeholder { color:#9aa7b8; }
 .proctor-preview { display:block; width:min(100%, 420px); max-height:260px; margin:1rem 0; object-fit:cover; border-radius:12px; background:#111827; border:2px solid rgba(29, 78, 216, .32); }
 .proctor-status { display: inline-flex; align-items: center; gap: .35rem; padding: .45rem .7rem; border-radius: 999px; font-size: .8rem; background: var(--primary-soft); color: var(--primary-strong); }
 .proctor-status.warn { background: var(--warning-soft); color: #9a3412; }
-.proctor-video { position: fixed; right: 1rem; bottom: 1rem; width: 150px; max-height: 110px; object-fit: cover; border-radius: 12px; border: 2px solid rgba(29, 78, 216, .32); box-shadow: 0 8px 24px rgba(15,23,42,.2); z-index: 20; background: #111827; }
-.proctor-landmarks { position:fixed; right:1rem; bottom:1rem; width:150px; height:110px; pointer-events:none; border-radius:12px; z-index:21; }
+.proctor-camera-window { position:fixed; width:180px; z-index:20; border-radius:12px; box-shadow:0 8px 24px rgba(15,23,42,.2); overflow:hidden; background:#111827; }
+.proctor-camera-handle { cursor:grab; touch-action:none; padding:5px 9px; color:#fff; background:#1e3a8a; font-size:.72rem; font-weight:700; user-select:none; }
+.proctor-camera-handle:active { cursor:grabbing; }
+.proctor-video { display:block; width:180px; height:132px; object-fit:cover; background:#111827; }
+.proctor-landmarks { position:absolute; left:0; bottom:0; width:180px; height:132px; pointer-events:none; }
 .filter-grid { display: grid; grid-template-columns: repeat(6, minmax(130px, 1fr)); gap: 1rem; align-items: end; margin-bottom: 1rem; }
 .filter-grid label { min-width: 0; }
 .pagination { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem; }

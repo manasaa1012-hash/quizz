@@ -29,10 +29,6 @@ import PredictionsPage from "./pages/PredictionsPage";
 import AchievementsPage from "./pages/AchievementsPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import AdminBadgesPage from "./pages/AdminBadgesPage";
-import MultiplayerHomePage from "./pages/MultiplayerHomePage";
-import CreateMultiplayerPage from "./pages/CreateMultiplayerPage";
-import JoinMultiplayerPage from "./pages/JoinMultiplayerPage";
-import MultiplayerRoomPage from "./pages/MultiplayerRoomPage";
 import AdminMultiplayerPage from "./pages/AdminMultiplayerPage";
 import AdminProctoringPage from "./pages/AdminProctoringPage";
 import AdminProctoringDetailPage from "./pages/AdminProctoringDetailPage";
@@ -66,10 +62,6 @@ export default function App() {
               <Route path="/app/predictions" element={<PredictionsPage />} />
               <Route path="/app/achievements" element={<AchievementsPage />} />
               <Route path="/app/notifications" element={<NotificationsPage />} />
-              <Route path="/app/multiplayer" element={<MultiplayerHomePage />} />
-              <Route path="/app/multiplayer/create" element={<CreateMultiplayerPage />} />
-              <Route path="/app/multiplayer/join" element={<JoinMultiplayerPage />} />
-              <Route path="/app/multiplayer/:roomCode" element={<MultiplayerRoomPage />} />
               <Route path="/app/profile" element={<ProfilePage />} />
             </Route>
           </Route>

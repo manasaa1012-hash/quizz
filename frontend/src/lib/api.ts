@@ -3,7 +3,8 @@ import { supabase } from "./supabase";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "/api",
-  timeout: 15000
+  // Serverless functions can take longer on their first request after idle time.
+  timeout: 45000
 });
 
 api.interceptors.request.use(async (config) => {
