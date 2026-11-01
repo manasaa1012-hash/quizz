@@ -25,8 +25,12 @@ import { presenceRouter } from "./routes/presence.js";
 import { errorHandler, notFound } from "./middleware/error.js";
 import { createRateLimit } from "./utils/rateLimit.js";
 
+// Vercel's TypeScript resolver identifies Helmet's ESM default differently
+// from the local compiler. This keeps the runtime default export explicit.
+const helmet = helmetModule.default as unknown as () => express.RequestHandler;
+
 export const app = express();
-app.use(helmetModule.default());
+app.use(helmet());
 app.disable("x-powered-by");
 app.set("trust proxy", 1);
 app.use(cors({
