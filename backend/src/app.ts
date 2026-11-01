@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import helmet from "helmet";
+import * as helmetModule from "helmet";
 import morgan from "morgan";
 import { env } from "./config/env.js";
 import { authRouter } from "./routes/auth.js";
@@ -26,7 +26,7 @@ import { errorHandler, notFound } from "./middleware/error.js";
 import { createRateLimit } from "./utils/rateLimit.js";
 
 export const app = express();
-app.use(helmet());
+app.use(helmetModule.default());
 app.disable("x-powered-by");
 app.set("trust proxy", 1);
 app.use(cors({
