@@ -30,7 +30,7 @@ examsRouter.get("/", async (req, res, next) => {
     const now = Date.now();
     const { data: exams, error } = await supabase
       .from("exams")
-      .select("id,title,description,duration_minutes,total_marks,passing_marks,attempt_limit,start_date,end_date,instructions,proctoring_enabled,webcam_required,camera_denied_action,is_published,status,is_active,subject_id")
+      .select("id,title,description,duration_minutes,total_marks,passing_marks,attempt_limit,start_date,end_date,instructions,proctoring_enabled,webcam_required,microphone_required,camera_denied_action,is_published,status,is_active,subject_id")
       .eq("status", "published")
       .eq("is_published", true)
       .eq("is_active", true)
@@ -129,6 +129,7 @@ examsRouter.get("/:id", async (req, res, next) => {
         instructions: exam.instructions,
         proctoring_enabled: exam.proctoring_enabled,
         webcam_required: exam.webcam_required,
+        microphone_required: exam.microphone_required,
         camera_denied_action: exam.camera_denied_action,
         fullscreen_required: exam.fullscreen_required,
         max_tab_switches: exam.max_tab_switches,

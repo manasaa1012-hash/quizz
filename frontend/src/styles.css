@@ -730,11 +730,13 @@ input::placeholder, textarea::placeholder { color:#9aa7b8; }
 .proctor-preview { display:block; width:min(100%, 420px); max-height:260px; margin:1rem 0; object-fit:cover; border-radius:12px; background:#111827; border:2px solid rgba(29, 78, 216, .32); }
 .proctor-status { display: inline-flex; align-items: center; gap: .35rem; padding: .45rem .7rem; border-radius: 999px; font-size: .8rem; background: var(--primary-soft); color: var(--primary-strong); }
 .proctor-status.warn { background: var(--warning-soft); color: #9a3412; }
-.proctor-camera-window { position:fixed; width:180px; z-index:20; border-radius:12px; box-shadow:0 8px 24px rgba(15,23,42,.2); overflow:hidden; background:#111827; }
+.proctor-camera-window { position:fixed; width:180px; z-index:20; border-radius:12px; box-shadow:0 8px 24px rgba(15,23,42,.2); overflow:hidden; background:#111827; max-width:calc(100vw - 32px); }
 .proctor-camera-handle { cursor:grab; touch-action:none; padding:5px 9px; color:#fff; background:#1e3a8a; font-size:.72rem; font-weight:700; user-select:none; }
 .proctor-camera-handle:active { cursor:grabbing; }
 .proctor-video { display:block; width:180px; height:132px; object-fit:cover; background:#111827; }
 .proctor-landmarks { position:absolute; left:0; bottom:0; width:180px; height:132px; pointer-events:none; }
+.json-preview { max-height:65vh; overflow:auto; margin:0; padding:16px; border-radius:12px; background:#0f172a; color:#e2e8f0; font-size:.8rem; line-height:1.5; white-space:pre-wrap; word-break:break-word; }
+@media(max-width:700px){.proctor-camera-window{position:sticky!important;right:auto!important;bottom:auto!important;margin:0 0 12px auto}.quiz-top{height:auto;min-height:72px;align-items:flex-start;padding:12px}.quiz-top-right{flex-wrap:wrap;justify-content:flex-end}.quiz-nav{padding-bottom:12px}}
 .filter-grid { display: grid; grid-template-columns: repeat(6, minmax(130px, 1fr)); gap: 1rem; align-items: end; margin-bottom: 1rem; }
 .filter-grid label { min-width: 0; }
 .pagination { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem; }

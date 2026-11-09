@@ -79,6 +79,7 @@ export default function AdminJsonImportPage() {
   const [error, setError] = useState("");
   const [importing, setImporting] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
 
   async function copyPrompt() {
     try {
@@ -105,6 +106,7 @@ export default function AdminJsonImportPage() {
     setMessage("");
     setError("");
     setPayload(null);
+    setPreviewOpen(false);
     setFileName("");
     if (!file) return;
     if (!file.name.toLowerCase().endsWith(".json")) {
@@ -179,10 +181,11 @@ export default function AdminJsonImportPage() {
           <small>{fileName ? "Ready to validate and import" : "Only .json files are accepted"}</small>
           <input type="file" accept="application/json,.json" onChange={readFile} />
         </label>
-        {payload && <div className="json-file-summary"><CheckCircle2 size={18} /><span><b>{payload.exam?.title || "Untitled exam"}</b><small>{payload.subject?.name || "No subject"} · {questionCount} question{questionCount === 1 ? "" : "s"}</small></span></div>}
+        {payload && <><div className="json-file-summary"><CheckCircle2 size={18} /><span><b>{payload.exam?.title || "Untitled exam"}</b><small>{payload.subject?.name || "No subject"} · {questionCount} question{questionCount === 1 ? "" : "s"}</small></span></div><button className="button secondary" type="button" onClick={() => setPreviewOpen(true)}>Preview JSON</button></>}
         <button className="button" type="button" disabled={!payload || importing} onClick={importJson}><Upload size={16} />{importing ? "Importing..." : "Validate & import exam"}</button>
         <small className="json-import-note">Tip: edit the JSON file first if you need to correct any generated content. A draft exam can be reviewed and published later from Exams.</small>
       </section>
     </div>
+    {previewOpen && payload && <div className="modal-backdrop" role="presentation"><section className="card modal-card" role="dialog" aria-modal="true" aria-label="JSON file preview"><div className="section-title"><h2>JSON preview</h2><button className="button small secondary" type="button" onClick={() => setPreviewOpen(false)}>Close</button></div><pre className="json-preview">{JSON.stringify(payload, null, 2)}</pre></section></div>}
   </>;
 }

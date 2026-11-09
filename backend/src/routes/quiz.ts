@@ -333,6 +333,7 @@ quizRouter.get("/attempt/:attemptId", async (req, res, next) => {
         allow_review: context.exam.allow_review,
         proctoring_enabled: context.exam.proctoring_enabled,
         webcam_required: context.exam.webcam_required,
+        microphone_required: context.exam.microphone_required,
         camera_denied_action: context.exam.camera_denied_action,
         fullscreen_required: context.exam.fullscreen_required,
         head_turn_yaw_threshold: context.exam.head_turn_yaw_threshold,

@@ -48,6 +48,7 @@ type AttemptPayload = {
     allow_review?: boolean;
     proctoring_enabled?: boolean;
     webcam_required?: boolean;
+    microphone_required?: boolean;
     camera_denied_action?: "warn" | "block";
     fullscreen_required?: boolean;
     head_turn_yaw_threshold?: number;
@@ -198,7 +199,8 @@ export default function QuizPage() {
     try {
       stopCamera();
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "user" }, width: { ideal: 640 }, height: { ideal: 480 } }, audio: false
+        video: examConfig?.webcam_required ? { facingMode: { ideal: "user" }, width: { ideal: 640 }, height: { ideal: 480 } } : false,
+        audio: Boolean(examConfig?.microphone_required)
       });
       streamRef.current = stream;
       setCameraState("active");
@@ -218,8 +220,8 @@ export default function QuizPage() {
       if (config.fullscreen_required && !document.fullscreenElement) {
         await document.documentElement.requestFullscreen().catch(() => { setError("Fullscreen could not be enabled. Check your browser settings and try again."); });
       }
-      if (config.webcam_required && !streamRef.current && config.camera_denied_action === "block") {
-        setError("Camera permission is required for this exam. Enable the camera before starting.");
+      if ((config.webcam_required || config.microphone_required) && !streamRef.current && config.camera_denied_action === "block") {
+        setError(`${config.microphone_required ? "Camera and microphone" : "Camera"} permission is required for this exam. Enable access before starting.`);
         return;
       }
       if (config.webcam_required && streamRef.current && videoRef.current) {
@@ -266,7 +268,7 @@ export default function QuizPage() {
       if (!active) return;
       const config = response.data.exam as Exam;
       setExamConfig(config);
-      if (!config.webcam_required) void beginExam(config);
+      if (!config.webcam_required && !config.microphone_required) void beginExam(config);
     }).catch((err: any) => active && setError(err.message));
     return () => { active = false; };
   }, [examId]);
@@ -395,9 +397,10 @@ export default function QuizPage() {
     };
     const handleVisibility = () => {
       if (document.visibilityState === "hidden") {
-        setProctorWarning("Warning: tab switching is monitored. Please remain on the exam page.");
+        setProctorWarning("Tab switching detected. Your exam is being submitted automatically.");
         report("visibility_hidden", { visibility_state: document.visibilityState });
         report("tab_switch", { visibility_state: document.visibilityState });
+        void handleSubmit(true);
       }
     };
     const handleCopy = () => report("copy_attempt");
@@ -606,16 +609,16 @@ export default function QuizPage() {
     return classes.join(" ");
   }
 
-  if (examConfig?.webcam_required && !payload) {
+  if ((examConfig?.webcam_required || examConfig?.microphone_required) && !payload) {
     return (
       <div className="center-screen proctor-consent-wrap">
         <section className="card proctor-consent" aria-labelledby="camera-consent-title">
           <Camera size={38} aria-hidden="true" />
-          <h1 id="camera-consent-title">Camera consent required</h1>
-          <p>This exam uses your camera to check whether no face, one face, or multiple faces are visible during the attempt.</p>
+          <h1 id="camera-consent-title">Device access required</h1>
+          <p>This exam uses {examConfig.webcam_required ? "your camera to check whether no face, one face, or multiple faces are visible" : "microphone access"}{examConfig.microphone_required && examConfig.webcam_required ? " and microphone access" : ""} during the attempt.</p>
           <ul>
             <li>No facial recognition or identity matching is performed.</li>
-            <li>Frames are processed locally in your browser.</li>
+            {examConfig.webcam_required && <li>Frames are processed locally in your browser.</li>}
             <li>Raw video is not uploaded or continuously stored; only event metadata is sent.</li>
             <li>If permission is denied, this exam will {examConfig.camera_denied_action === "block" ? "not start" : "show a warning and continue"}.</li>
           </ul>
@@ -623,7 +626,7 @@ export default function QuizPage() {
           {cameraError && <div className="alert error">{cameraError}</div>}
           {error && <div className="alert error">{error}</div>}
           <div className="button-row">
-            {cameraState !== "active" && <button className="button" disabled={preparing} onClick={() => void requestCamera()}><Camera size={17} /> Enable camera</button>}
+            {cameraState !== "active" && <button className="button" disabled={preparing} onClick={() => void requestCamera()}><Camera size={17} /> Enable {examConfig.microphone_required ? "camera & microphone" : "camera"}</button>}
             {cameraState === "active" && <button className="button" disabled={preparing} onClick={() => void beginExam(examConfig)}><Camera size={17} /> {preparing ? "Starting exam..." : "Start proctored exam"}</button>}
             {cameraState !== "active" && examConfig.camera_denied_action === "warn" && <button className="button secondary" disabled={preparing} onClick={() => void beginExam(examConfig)}>Continue without camera</button>}
             <button className="button secondary" onClick={() => navigate(`/app/exams/${examConfig.id}`)}>Cancel</button>

@@ -10,7 +10,7 @@ import { supabase } from "../lib/supabase";
 const studentLinks = [
   { title: "Workspace", items: [{ to: "/app", icon: Gauge, label: "Dashboard", end: true }, { to: "/app/exams", icon: ClipboardList, label: "Exams" }, { to: "/app/attempts", icon: History, label: "Attempts" }, { to: "/app/analytics", icon: BarChart3, label: "Analytics" }] },
   { title: "Learning", items: [{ to: "/app/recommendations", icon: BrainCircuit, label: "AI Coach" }, { to: "/app/adaptive", icon: Target, label: "Adaptive Practice" }, { to: "/app/revision-plan", icon: CalendarDays, label: "Revision Plan" }, { to: "/app/predictions", icon: Sparkles, label: "Predictions" }] },
-  { title: "Community", items: [{ to: "/app/leaderboard", icon: Medal, label: "Leaderboard" }, { to: "/app/achievements", icon: Award, label: "Achievements" }, { to: "/app/notifications", icon: Bell, label: "Notifications" }, { to: "/app/profile", icon: UserRound, label: "Profile" }] }
+  { title: "Community", items: [{ to: "/app/multiplayer", icon: Gamepad2, label: "Multiplayer" }, { to: "/app/leaderboard", icon: Medal, label: "Leaderboard" }, { to: "/app/achievements", icon: Award, label: "Achievements" }, { to: "/app/notifications", icon: Bell, label: "Notifications" }, { to: "/app/profile", icon: UserRound, label: "Profile" }] }
 ];
 
 const adminLinks = [

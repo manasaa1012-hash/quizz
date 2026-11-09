@@ -19,6 +19,7 @@ const emptyExam = {
   allow_review: true,
   proctoring_enabled: false,
   webcam_required: false,
+  microphone_required: false,
   camera_denied_action: "warn" as "warn" | "block",
   fullscreen_required: false,
   max_tab_switches: 3,
@@ -119,6 +120,7 @@ export default function AdminExamsPage() {
       allow_review: exam.allow_review,
       proctoring_enabled: exam.proctoring_enabled,
       webcam_required: exam.webcam_required,
+      microphone_required: exam.microphone_required || false,
       camera_denied_action: exam.camera_denied_action || "warn",
       fullscreen_required: exam.fullscreen_required,
       max_tab_switches: exam.max_tab_switches,
@@ -244,7 +246,8 @@ export default function AdminExamsPage() {
           <label className="check"><input type="checkbox" checked={form.allow_review} onChange={(event) => setForm({ ...form, allow_review: event.target.checked })} /> Allow review</label>
           <label className="check"><input type="checkbox" checked={form.proctoring_enabled} onChange={(event) => setForm({ ...form, proctoring_enabled: event.target.checked })} /> Proctoring enabled</label>
           <label className="check"><input type="checkbox" checked={form.webcam_required} onChange={(event) => setForm({ ...form, webcam_required: event.target.checked, proctoring_enabled: event.target.checked || form.proctoring_enabled })} /> Webcam presence/count monitoring required</label>
-          {form.webcam_required && <label>When camera permission is denied<select value={form.camera_denied_action} onChange={(event) => setForm({ ...form, camera_denied_action: event.target.value as "warn" | "block" })}><option value="warn">Warn and allow exam</option><option value="block">Block exam start</option></select></label>}
+          <label className="check"><input type="checkbox" checked={form.microphone_required} onChange={(event) => setForm({ ...form, microphone_required: event.target.checked, proctoring_enabled: event.target.checked || form.proctoring_enabled })} /> Microphone access required</label>
+          {(form.webcam_required || form.microphone_required) && <label>When device permission is denied<select value={form.camera_denied_action} onChange={(event) => setForm({ ...form, camera_denied_action: event.target.value as "warn" | "block" })}><option value="warn">Warn and allow exam</option><option value="block">Block exam start</option></select></label>}
           <label className="check"><input type="checkbox" checked={form.fullscreen_required} onChange={(event) => setForm({ ...form, fullscreen_required: event.target.checked })} /> Fullscreen required</label>
           <label className="check"><input type="checkbox" checked={form.is_active} onChange={(event) => setForm({ ...form, is_active: event.target.checked })} /> Exam active</label>
           <div className="button-row">

@@ -67,6 +67,7 @@ export interface Exam {
   allow_review?: boolean;
   proctoring_enabled?: boolean;
   webcam_required?: boolean;
+  microphone_required?: boolean;
   camera_denied_action?: "warn" | "block";
   fullscreen_required?: boolean;
   max_tab_switches?: number;
