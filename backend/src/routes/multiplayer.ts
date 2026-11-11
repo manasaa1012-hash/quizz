@@ -5,9 +5,8 @@ import {supabase} from "../config/supabase.js";
 import {AppError} from "../utils/http.js";
 
 export const multiplayerRouter=Router(); multiplayerRouter.use(requireAuth);
-// Room creation is an administrator workflow; students may only participate in
-// rooms assigned to them by an administrator.
-multiplayerRouter.post("/rooms",requireAdmin);
+// Any authenticated player can host a room. The creator becomes its host and
+// can start it when the other players are ready.
 const createSchema=z.object({name:z.string().trim().min(2).max(80),subject_id:z.string().uuid(),topic_id:z.string().uuid().nullable().optional(),exam_id:z.string().uuid().nullable().optional(),question_ids:z.array(z.string().uuid()).max(50).optional(),question_count:z.number().int().min(1).max(50),difficulty:z.enum(["easy","medium","hard"]).nullable().optional(),question_time_seconds:z.number().int().min(10).max(180),max_players:z.number().int().min(2).max(50),is_public:z.boolean()}).refine(b=>!!b.exam_id||!!b.question_ids?.length,{message:"Select an exam or at least one question."});
 const code=()=>Array.from({length:6},()=>"ABCDEFGHJKLMNPQRSTUVWXYZ23456789"[Math.floor(Math.random()*32)]).join("");
 const fail=(error:any,message:string)=>{if(error)throw new AppError(400,error.message||message)};
