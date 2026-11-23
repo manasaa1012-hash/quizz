@@ -227,10 +227,33 @@ async function finalizeAttempt(attemptId: string, userId: string, submissionToke
   if (rewardError) console.error("Unable to apply attempt rewards", rewardError);
   const { data: rewardedAttempt } = await supabase.from("exam_attempts").select("xp_earned").eq("id", attemptId).single();
   const xpEarned = Number(rewardedAttempt?.xp_earned || 0);
-  const { data: pendingPrediction } = await supabase.from("performance_predictions").select("id,predicted_score")
-    .eq("user_id", userId).is("actual_score", null).lt("created_at", submittedAt)
-    .order("created_at", { ascending: false }).limit(1).maybeSingle();
-  if (pendingPrediction) await supabase.from("performance_predictions").update({actual_score:Number(percentage.toFixed(2)),prediction_error:Number(Math.abs(Number(pendingPrediction.predicted_score)-percentage).toFixed(2))}).eq("id",pendingPrediction.id);
+  // `created_at` is assigned by Postgres while `submittedAt` is assigned by the
+  // application.  Do not compare the two clocks here: a small clock skew made a
+  // valid forecast look newer than its quiz submission and left it pending.
+  // The most recent unresolved forecast is, by definition, the one for this
+  // completed quiz.
+  const { data: pendingPrediction, error: pendingPredictionError } = await supabase
+    .from("performance_predictions")
+    .select("id,predicted_score")
+    .eq("user_id", userId)
+    .is("actual_score", null)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (pendingPredictionError) throw new AppError(500, "Unable to find the pending prediction.");
+
+  if (pendingPrediction) {
+    const actualScore = Number(percentage.toFixed(2));
+    const { error: predictionUpdateError } = await supabase
+      .from("performance_predictions")
+      .update({
+        actual_score: actualScore,
+        prediction_error: Number(Math.abs(Number(pendingPrediction.predicted_score) - actualScore).toFixed(2))
+      })
+      .eq("id", pendingPrediction.id)
+      .eq("user_id", userId);
+    if (predictionUpdateError) throw new AppError(500, "Unable to record the actual prediction score.");
+  }
   try { await buildAnalytics(userId); } catch (error) { console.error("Unable to refresh topic abilities", error); }
 
   return {
