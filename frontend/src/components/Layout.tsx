@@ -1,5 +1,5 @@
 import {
-  Award, BarChart3, Bell, BrainCircuit, CalendarDays, Camera, ClipboardList, FileJson, Gamepad2, Gauge, History, LogOut, Medal, Menu, NotebookPen, Search, Shapes, ShieldCheck, Sparkles, SquareLibrary, Target, UserRound, Users, WandSparkles, X, Flame, Zap
+  Award, BarChart3, Bell, BrainCircuit, CalendarDays, Camera, ClipboardList, FileJson, Gamepad2, Gauge, History, LogOut, Medal, Menu, NotebookPen, Search, Shapes, ShieldCheck, Sparkles, SquareLibrary, Target, UserRound, Users, X, Flame, Zap
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -16,7 +16,7 @@ const studentLinks = [
 const adminLinks = [
   { title: "Operations", items: [{ to: "/admin", icon: ShieldCheck, label: "Dashboard", end: true }, { to: "/admin/exams", icon: ClipboardList, label: "Exams" }, { to: "/admin/questions", icon: NotebookPen, label: "Questions" }, { to: "/admin/users", icon: Users, label: "Users" }] },
   { title: "Catalog", items: [{ to: "/admin/subjects", icon: Shapes, label: "Subjects" }, { to: "/admin/topics", icon: SquareLibrary, label: "Topics" }, { to: "/admin/badges", icon: Award, label: "Badges" }] },
-  { title: "Monitoring", items: [{ to: "/admin/multiplayer", icon: Gamepad2, label: "Multiplayer" }, { to: "/admin/proctoring", icon: Camera, label: "Proctoring" }, { to: "/admin/ai-questions", icon: WandSparkles, label: "AI Questions" }, { to: "/admin/json-import", icon: FileJson, label: "Upload JSON" }] }
+  { title: "Monitoring", items: [{ to: "/admin/multiplayer", icon: Gamepad2, label: "Multiplayer" }, { to: "/admin/proctoring", icon: Camera, label: "Proctoring" }, { to: "/admin/json-import", icon: FileJson, label: "Upload JSON" }] }
 ];
 
 export function Layout({ admin = false }: { admin?: boolean }) {
